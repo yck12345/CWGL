@@ -1,6 +1,7 @@
 package com.example.yck1.cwgl.Activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +29,8 @@ import com.example.yck1.cwgl.R;
 import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,10 +97,34 @@ public class SrglFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final EditText et_srje = (EditText) view.findViewById(R.id.srje);
         final EditText et_srbz = (EditText) view.findViewById(R.id.srbz);
-        TextView tv_srsj = (TextView) view.findViewById(R.id.srsj);
+        final TextView tv_srsj = (TextView) view.findViewById(R.id.srsj);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String date = sdf.format(new java.util.Date());
+        final Date mdate = new java.util.Date();
+        String date = sdf.format(mdate);
         tv_srsj.setText(date);
+        tv_srsj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
+                new DatePickerDialog(getActivity(),
+                        // 绑定监听器
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                               tv_srsj.setText(year+"/"+(monthOfYear+1)+"/"+dayOfMonth);
+                            }
+                        }
+                        // 设置初始日期
+                        , c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+                        .get(Calendar.DAY_OF_MONTH)).show();
+//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//                String date = sdf.format(calendarView.getDate());
+
+            }
+        });
 
         Button srcz = (Button) view.findViewById(R.id.cz);
         srcz.setOnClickListener(new View.OnClickListener() {
