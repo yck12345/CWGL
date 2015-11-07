@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.yck1.cwgl.Activity.MainActivity"
+    tools:showIn="@layout/app_bar_main"
+    android:padding="0dp">
+
+    <RelativeLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></RelativeLayout>
+
+    <TabWidget
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/re_szgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_szgl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"/>
+
+            <TextView
+                android:layout_below="@id/image_szgl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/szgl"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_szck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_szck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"/>
+
+            <TextView
+                android:layout_below="@id/image_szck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/szck"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/re_htgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/image_htgl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"/>
+
+            <TextView
+                android:layout_below="@id/image_htgl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/htgl"/>
+        </RelativeLayout>
+
+
+
+    </TabWidget>
+
+
+
+</RelativeLayout>
