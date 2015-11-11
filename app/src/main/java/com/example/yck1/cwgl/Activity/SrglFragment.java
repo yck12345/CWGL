@@ -11,20 +11,34 @@ import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.yck1.cwgl.File.FileIO;
 import com.example.yck1.cwgl.R;
+import com.example.yck1.cwgl.User.Ht;
+import com.example.yck1.cwgl.User.Sr;
+import com.example.yck1.cwgl.User.SrSerialiser;
+import com.example.yck1.cwgl.User.User;
+import com.example.yck1.cwgl.User.UserSerialiser;
+import com.example.yck1.cwgl.User.Zc;
+import com.example.yck1.cwgl.User.ZcSerialiser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.joda.time.DateTime;
 
@@ -40,7 +54,7 @@ import java.util.Date;
  * Use the {@link SrglFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SrglFragment extends Fragment {
+public class SrglFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,6 +63,8 @@ public class SrglFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private int value = 0;
 
 
     private OnFragmentInteractionListener mListener;
@@ -114,7 +130,7 @@ public class SrglFragment extends Fragment {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                               tv_srsj.setText(year+"/"+(monthOfYear+1)+"/"+dayOfMonth);
+                                tv_srsj.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
                             }
                         }
                         // 设置初始日期
@@ -136,24 +152,102 @@ public class SrglFragment extends Fragment {
         });
 
 
-
         final Spinner spinner_fs = (Spinner) view.findViewById(R.id.spinner_fs);
-        String[] srfs = {"现金", "银行转账", "其他"};
-        String[] srfl = {"合同款", "债务", "其他"};
+        final String[] srfs = {"现金", "银行转账", "其他"};
+        final String[] srfl = {"合同款", "债务", "其他"};
         String[] zcfl = {"员工工资", "合同款", "债务", "其他"};
         final ArrayAdapter<String> adapter_srfs = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, srfs);
         spinner_fs.setAdapter(adapter_srfs);
+
         final Spinner spinner_fl = (Spinner) view.findViewById(R.id.spinner_fl);
         final ArrayAdapter<String> adapter_srfl = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, srfl);
         spinner_fl.setAdapter(adapter_srfl);
         final ArrayAdapter<String> adapter_zcfl = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_list_item_1, zcfl);
-        Button srok= (Button) view.findViewById(R.id.srok);
-        srok.setOnClickListener(new View.OnClickListener() {
+
+        final String[] fs = new String[1];
+        spinner_fs.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-               getFragmentManager().popBackStack();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                fs[0] = adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        final String[] fl = new String[1];
+        spinner_fl.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                fl[0] = adapterView.getItemAtPosition(i).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        final Button[] srok = {(Button) view.findViewById(R.id.srok)};
+        srok[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (value) {
+                    case 0:
+
+                        Sr sr = new Sr();
+                        int count = Integer.parseInt(et_srje.getText().toString());
+                        if (et_srje.getText() == null) {
+                            count = 0;
+                        }
+                        sr.setCount(count);
+                        sr.setTime(tv_srsj.getText().toString());
+                        sr.setDescription(et_srbz.getText().toString());
+                        sr.setFs(fs[0]);
+                        sr.setFl(fl[0]);
+                        //user.setSrs(new Sr[]{sr});
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.serializeNulls();
+                        //gsonBuilder.registerTypeAdapter(User.class,new UserSerialiser());
+                        gsonBuilder.registerTypeAdapter(Sr.class, new SrSerialiser());
+                        Gson gson = gsonBuilder.create();
+                        String json = gson.toJson(sr);
+                        FileIO file = new FileIO();
+                        file.write(json, "/sr.json");
+                        break;
+
+                    case 1:
+
+                        Zc zc = new Zc();
+                        int count1 = Integer.parseInt(et_srje.getText().toString());
+                        if (et_srje.getText() == null) {
+                            count1 = 0;
+                        }
+                        zc.setCount(count1);
+                        zc.setTime(tv_srsj.getText().toString());
+                        zc.setDescription(et_srbz.getText().toString());
+                        zc.setFs(fs[0]);
+                        zc.setFl(fl[0]);
+                        //user.setZcs(new Zc[]{zc});
+                        GsonBuilder gsonBuilder1 = new GsonBuilder();
+                        gsonBuilder1.serializeNulls();
+                        gsonBuilder1.registerTypeAdapter(Zc.class, new ZcSerialiser());
+                        Gson gson1 = gsonBuilder1.create();
+                        String json1 = gson1.toJson(zc);
+                        FileIO file1 = new FileIO();
+                        file1.write(json1, "/zc.json");
+                        break;
+
+                }
+
+                getFragmentManager().beginTransaction().replace(R.id.main, new SzckFragment()).commit();
+                RelativeLayout re_szck = (RelativeLayout) getActivity().findViewById(R.id.re_szck);
+                re_szck.setBackgroundColor(getResources().getColor(R.color.blue));
+                RelativeLayout re_szgl = (RelativeLayout) getActivity().findViewById(R.id.re_szgl);
+                re_szgl.setBackgroundColor(0);
+            }
+        });
+
 
         final TextView tv_sr = (TextView) view.findViewById(R.id.tv_sr);
         final TextView tv_zc = (TextView) view.findViewById(R.id.tv_zc);
@@ -161,6 +255,7 @@ public class SrglFragment extends Fragment {
         tv_sr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                value = 0;
                 tv_zc.setBackgroundColor(0);
                 tv_sr.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 spinner_fl.setAdapter(adapter_srfl);
@@ -169,11 +264,13 @@ public class SrglFragment extends Fragment {
         tv_zc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                value = 1;
                 tv_sr.setBackgroundColor(0);
                 tv_zc.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 spinner_fl.setAdapter(adapter_zcfl);
             }
         });
+
 
 //        getView().setOnKeyListener(new View.OnKeyListener() {
 //            @Override
@@ -211,6 +308,16 @@ public class SrglFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     /**

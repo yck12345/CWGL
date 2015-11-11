@@ -3,6 +3,7 @@ package com.example.yck1.cwgl.Activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,23 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.yck1.cwgl.File.FileIO;
 import com.example.yck1.cwgl.R;
 import com.example.yck1.cwgl.Activity.dummy.DummyContent;
+import com.example.yck1.cwgl.User.Sr;
+import com.example.yck1.cwgl.User.SrDeserializer;
+import com.example.yck1.cwgl.User.User;
+import com.example.yck1.cwgl.User.UserDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
+import java.io.StringReader;
 
 /**
  * A fragment representing a list of Items.
@@ -42,11 +56,13 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
      */
     private AbsListView mListView;
 
+    User user;
+
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private ArrayAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static SzckFragment newInstance(String param1, String param2) {
@@ -74,7 +90,14 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // TODO: Change Adapter to display your content
+        FileIO fileIO = new FileIO();
+       String jsonObject=  fileIO.read("/sr.json");
+
+
+
+
+
+         //TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }

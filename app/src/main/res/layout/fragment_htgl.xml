@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:hint="@string/qsrje"
             android:inputType="number"
-            android:id="@+id/srje"
+            android:id="@+id/htje"
             android:layout_marginLeft="10dp"/>
 
     </LinearLayout>
@@ -35,7 +35,7 @@
             android:text="@string/fs"/>
 
         <Spinner
-            android:id="@+id/spinner_fs"
+            android:id="@+id/spinner_ht_fs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"></Spinner>
@@ -53,7 +53,7 @@
             android:text="@string/fl" />
 
         <Spinner
-            android:id="@+id/spinner_fl"
+            android:id="@+id/spinner_ht_fl"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"></Spinner>
@@ -68,12 +68,12 @@
             android:layout_height="wrap_content"
             android:text="@string/sj"/>
         <TextView
-            android:id="@+id/srsj"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="30dp"/>
+            android:textSize="30dp"
+            android:id="@+id/htsj"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/srbz"
-            android:id="@+id/srbz" />
+            android:id="@+id/htbz" />
 
     </LinearLayout>
     <LinearLayout
@@ -105,7 +105,7 @@
             android:gravity="center"
             android:layout_marginRight="48dp"
             android:layout_marginLeft="48dp"
-            android:id="@+id/cz" />
+            android:id="@+id/htcz" />
 
         <Button
             android:id="@+id/srok"
@@ -114,7 +114,7 @@
             android:text="@string/ok"
             android:gravity="center"
             android:layout_marginLeft="48dp"
-            android:onClick="srok"/>
+            android:onClick="htok"/>
     </LinearLayout>
 
 

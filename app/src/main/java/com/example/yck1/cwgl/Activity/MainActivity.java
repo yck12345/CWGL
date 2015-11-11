@@ -1,5 +1,6 @@
 package com.example.yck1.cwgl.Activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.TabWidget;
 
 import com.example.yck1.cwgl.R;
 import com.example.yck1.cwgl.User.User;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SzckFragment.OnFragmentInteractionListener, SrglFragment.OnFragmentInteractionListener,HtglFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SzckFragment.OnFragmentInteractionListener, SrglFragment.OnFragmentInteractionListener, HtglFragment.OnFragmentInteractionListener {
 
     User user;
 
@@ -30,37 +32,44 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        final TabWidget tabWidget = (TabWidget) findViewById(R.id.tabwidget);
+//        if (tabWidget.getFocusedChild()!=null) {
+//            for (int i = 1; i <=3 ; i++) {
+//                tabWidget.getChildTabViewAt(1).setBackgroundColor(getResources().getColor(R.color.blue));
+//            }
+//                }
 
-        getFragmentManager().beginTransaction().add(R.id.main, new SzckFragment()).addToBackStack(null).commit();
+
+        getFragmentManager().beginTransaction().add(R.id.main, new SrglFragment()).commit();
         final RelativeLayout re_szck = (RelativeLayout) findViewById(R.id.re_szck);
-        re_szck.setBackgroundColor(getResources().getColor(R.color.blue));
         final RelativeLayout re_szgl = (RelativeLayout) findViewById(R.id.re_szgl);
         final RelativeLayout re_htgl = (RelativeLayout) findViewById(R.id.re_htgl);
+        re_szgl.setBackgroundColor(getResources().getColor(R.color.blue));
         re_htgl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 re_htgl.setBackgroundColor(getResources().getColor(R.color.blue));
-                re_szck.setBackgroundColor(0);
                 re_szgl.setBackgroundColor(0);
-                getFragmentManager().beginTransaction().replace(R.id.main, new HtglFragment()).addToBackStack(null).commit();
+                re_szck.setBackgroundColor(0);
+                getFragmentManager().beginTransaction().replace(R.id.main, new HtglFragment()).commit();
             }
         });
         re_szck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 re_szck.setBackgroundColor(getResources().getColor(R.color.blue));
-                re_htgl.setBackgroundColor(0);
                 re_szgl.setBackgroundColor(0);
-                getFragmentManager().beginTransaction().replace(R.id.main, new SzckFragment()).addToBackStack(null).commit();
+                re_htgl.setBackgroundColor(0);
+                getFragmentManager().beginTransaction().replace(R.id.main, new SzckFragment()).commit();
             }
         });
         re_szgl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 re_szgl.setBackgroundColor(getResources().getColor(R.color.blue));
-                re_szck.setBackgroundColor(0);
                 re_htgl.setBackgroundColor(0);
-                getFragmentManager().beginTransaction().replace(R.id.main, new SrglFragment()).addToBackStack(null).commit();
+                re_szck.setBackgroundColor(0);
+                getFragmentManager().beginTransaction().replace(R.id.main, new SrglFragment()).commit();
             }
         });
 
@@ -128,6 +137,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camara) {
             // Handle the camera action
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
