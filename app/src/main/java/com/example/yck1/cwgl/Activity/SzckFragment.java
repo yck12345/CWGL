@@ -1,33 +1,31 @@
 package com.example.yck1.cwgl.Activity;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.example.yck1.cwgl.Activity.dummy.DummyContent;
 import com.example.yck1.cwgl.File.FileIO;
 import com.example.yck1.cwgl.R;
-import com.example.yck1.cwgl.Activity.dummy.DummyContent;
 import com.example.yck1.cwgl.User.Sr;
-import com.example.yck1.cwgl.User.SrDeserializer;
 import com.example.yck1.cwgl.User.User;
-import com.example.yck1.cwgl.User.UserDeserializer;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A fragment representing a list of Items.
@@ -54,7 +52,7 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
     /**
      * The fragment's ListView/GridView.
      */
-    private AbsListView mListView;
+    private ListView mListView;
 
     User user;
 
@@ -62,7 +60,7 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ArrayAdapter mAdapter;
+    private SimpleAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static SzckFragment newInstance(String param1, String param2) {
@@ -91,63 +89,104 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
         }
 
         FileIO fileIO = new FileIO();
-       String jsonObject=  fileIO.read("/sr.json");
-
-
-
-
-
-         //TODO: Change Adapter to display your content
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item, container, false);
-
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-
-        return view;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+        String s = fileIO.read("sr.json");
+//        GsonBuilder gsonBuilder = new GsonBuilder();
+//        gsonBuilder.registerTypeAdapter(User.class,new UserDeserializer());
+//        gsonBuilder.registerTypeAdapter(Sr.class, new SrDeserializer());
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(s).getAsJsonArray();
+        Gson gson = new Gson();
+        Sr[] sr = new Sr[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            sr[i] = gson.fromJson(jsonArray.get(i), Sr.class);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        int[] count = new int[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            count[i] = sr[i].getCount();
         }
+        String[] time = new String[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            time[i] = sr[i].getTime();
+        }
+        String[] description = new String[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            description[i] = sr[i].getDescription();
+        }
+        String[] fs = new String[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            fs[i] = sr[i].getFs();
+        }
+        String[] fl = new String[100];
+        for (int i = 0; i < jsonArray.size(); i++) {
+            fl[i] = sr[i].getFl();
+        }
+
+        Log.d("Sr", fl[4]);
+        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < fl.length; i++) {
+            Map<String, Object> listItem = new HashMap<String, Object>();
+            listItem.put("time", time[i]);
+            listItem.put("count", count[i]);
+            listItem.put("description", description[i]);
+            listItem.put("fs", fs[i]);
+            listItem.put("fl", fl[i]);
+        }
+
+        mAdapter = new SimpleAdapter(getActivity(), listItems, R.layout.list_item, new String[]{"time", "count", "description", "fs", "fl"},
+                new int[]{R.id.tv_time,R.id.tv_count,R.id.tv_description,R.id.tv_list_fs,R.id.tv_list_fl});
+
+//        //TODO: Change Adapter to display your content
+//        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+//                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
+        @Override
+        public View onCreateView (LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState){
+            View view = inflater.inflate(R.layout.fragment_item, container, false);
+
+            // Set the adapter
+            mListView = (ListView) view.findViewById(android.R.id.list);
+            mListView.setAdapter(mAdapter);
+
+            // Set OnItemClickListener so we can be notified on item clicks
+            mListView.setOnItemClickListener(this);
+
+            return view;
+        }
+
+        @Override
+        public void onAttach (Activity activity){
+            super.onAttach(activity);
+            try {
+                mListener = (OnFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(activity.toString()
+                        + " must implement OnFragmentInteractionListener");
+            }
+        }
+
+        @Override
+        public void onDetach () {
+            super.onDetach();
+            mListener = null;
+        }
+
+        @Override
+        public void onItemClick (AdapterView < ? > parent, View view,int position, long id){
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            }
+        }
+
+        /**
+         * The default content for this Fragment has a TextView that is shown when
+         * the list is empty. If you would like to change the text, call this method
+         * to supply the text it should use.
+         */
+
     public void setEmptyText(CharSequence emptyText) {
         View emptyView = mListView.getEmptyView();
 

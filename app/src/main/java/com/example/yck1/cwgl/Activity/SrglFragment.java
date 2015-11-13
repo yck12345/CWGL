@@ -213,7 +213,7 @@ public class SrglFragment extends Fragment implements AdapterView.OnItemSelected
                         Gson gson = gsonBuilder.create();
                         String json = gson.toJson(sr);
                         FileIO file = new FileIO();
-                        file.write(json, "/sr.json");
+                        file.write(","+json+"]", "sr.json");
                         break;
 
                     case 1:
@@ -235,7 +235,7 @@ public class SrglFragment extends Fragment implements AdapterView.OnItemSelected
                         Gson gson1 = gsonBuilder1.create();
                         String json1 = gson1.toJson(zc);
                         FileIO file1 = new FileIO();
-                        file1.write(json1, "/zc.json");
+                        file1.write(json1+"]", "zc.json");
                         break;
 
                 }

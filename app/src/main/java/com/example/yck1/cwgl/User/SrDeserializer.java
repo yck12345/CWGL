@@ -1,5 +1,6 @@
 package com.example.yck1.cwgl.User;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -23,5 +24,6 @@ public class SrDeserializer implements JsonDeserializer {
         sr.setFs(jsonObject.get("fs").getAsString());
         sr.setFl(jsonObject.get("fl").getAsString());
         return sr;
-    }
+
+        }
 }

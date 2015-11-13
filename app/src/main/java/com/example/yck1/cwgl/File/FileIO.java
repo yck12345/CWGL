@@ -20,7 +20,7 @@ public class FileIO {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
                 File sdCardDir = Environment.getExternalStorageDirectory();
                 try {
-                    FileInputStream fis = new FileInputStream(sdCardDir.getCanonicalPath() + filename);
+                    FileInputStream fis = new FileInputStream(sdCardDir.getCanonicalPath() +"/"+ filename);
                     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                     StringBuilder sb = new StringBuilder("");
                     String line =null;
@@ -40,10 +40,10 @@ public class FileIO {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
             File sdCardDir = Environment.getExternalStorageDirectory();
             try {
-                File targetFile = new File(sdCardDir.getCanonicalPath()+filename);
-                Log.d("sr",sdCardDir.getCanonicalPath());
+                File targetFile = new File(sdCardDir.getCanonicalPath()+"/"+filename);
                 RandomAccessFile raf = new RandomAccessFile(targetFile,"rw");
-                raf.seek(targetFile.length());
+                if (targetFile.length()>1){
+                raf.seek(targetFile.length()-1);}
                 raf.write(content.getBytes());
                 raf.close();
             } catch (IOException e) {
