@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                 FileIO file1 = new FileIO();
                 file1.write(json, "user.json");
                 file1.write("[{\"count\":0,\"time\":\" null\",\"description\":\" null\",\"fs\":\"null \",\"fl\":\"null \"} ]","sr.json");
-                file1.write("{"+"'zcs':"+"[]}","zc.json");
-                file1.write("{"+"'hts':"+"[]}", "ht.json");
+                file1.write("[{\"count\":0,\"time\":\" null\",\"description\":\" null\",\"fs\":\"null \",\"fl\":\"null \"} ]","zc.json");
+                file1.write("[{\"number\":0,\"time\":\" null\",\"description\":\" null\"} ]", "ht.json");
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

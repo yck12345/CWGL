@@ -18,11 +18,13 @@ import com.example.yck1.cwgl.File.FileIO;
 import com.example.yck1.cwgl.R;
 import com.example.yck1.cwgl.User.Sr;
 import com.example.yck1.cwgl.User.User;
+import com.example.yck1.cwgl.User.Zc;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +56,9 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
      */
     private ListView mListView;
 
-    User user;
 
+    User user;
+    List<Map<String, Object>> listItems;
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
@@ -79,6 +82,11 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
     public SzckFragment() {
     }
 
+    public static <T> T[] concat(T[] first, T[] second) {
+        T[] result = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+        return result;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,43 +104,55 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonArray = jsonParser.parse(s).getAsJsonArray();
         Gson gson = new Gson();
-        Sr[] sr = new Sr[100];
-        for (int i = 0; i < jsonArray.size(); i++) {
-            sr[i] = gson.fromJson(jsonArray.get(i), Sr.class);
+        int arraynumber = jsonArray.size();
+        Sr[] sr = new Sr[arraynumber];
+        for (int i = 0; i <jsonArray.size() ; i++) {
+            sr[i]= gson.fromJson(jsonArray.get(i),Sr.class);
         }
-        int[] count = new int[100];
+        int[] count = new int[arraynumber];
+        String[] time = new String[arraynumber];
+        String[] description = new String[arraynumber];
+        String[] fs = new String[arraynumber];
+        String[] fl = new String[arraynumber];
+        FileIO file =new FileIO();
+        String string = file.read("zc.json");
+        JsonArray json1 = jsonParser.parse(string).getAsJsonArray();
+        int arraynumber1 = json1.size();
+        Zc[] zc = new Zc[arraynumber1];
+        for (int i = 0; i <json1.size() ; i++) {
+            zc[i] = gson.fromJson(json1.get(i),Zc.class);
+        }
         for (int i = 0; i < jsonArray.size(); i++) {
             count[i] = sr[i].getCount();
-        }
-        String[] time = new String[100];
-        for (int i = 0; i < jsonArray.size(); i++) {
             time[i] = sr[i].getTime();
-        }
-        String[] description = new String[100];
-        for (int i = 0; i < jsonArray.size(); i++) {
             description[i] = sr[i].getDescription();
-        }
-        String[] fs = new String[100];
-        for (int i = 0; i < jsonArray.size(); i++) {
             fs[i] = sr[i].getFs();
-        }
-        String[] fl = new String[100];
-        for (int i = 0; i < jsonArray.size(); i++) {
             fl[i] = sr[i].getFl();
         }
-
-        Log.d("Sr", fl[4]);
-        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < fl.length; i++) {
+        int[] count1 = new int[arraynumber1];
+        String[] time1 = new String[arraynumber1];
+        String[] description1 = new String[arraynumber1];
+        String[] fs1 = new String[arraynumber1];
+        String[] fl1 = new String[arraynumber1];
+        for (int i = 1; i <json1.size() ; i++) {
+            count1[i] = zc[i].getCount();
+            time1[i] = zc[i].getTime();
+            description1[i] = zc[i].getDescription();
+            fs1[i] = zc[i].getFs();
+            fl1[i] = zc[i].getFl();
+        }
+         listItems = new ArrayList<Map<String, Object>>();
+        for (int i = 1; i < jsonArray.size(); i++) {
             Map<String, Object> listItem = new HashMap<String, Object>();
             listItem.put("time", time[i]);
             listItem.put("count", count[i]);
             listItem.put("description", description[i]);
             listItem.put("fs", fs[i]);
             listItem.put("fl", fl[i]);
+            listItems.add(listItem);
         }
 
-        mAdapter = new SimpleAdapter(getActivity(), listItems, R.layout.list_item, new String[]{"time", "count", "description", "fs", "fl"},
+        mAdapter = new SimpleAdapter(getActivity(), listItems, R.layout.list_item, new String[]{"time", "count",  "fs", "fl","description"},
                 new int[]{R.id.tv_time,R.id.tv_count,R.id.tv_description,R.id.tv_list_fs,R.id.tv_list_fl});
 
 //        //TODO: Change Adapter to display your content
@@ -146,7 +166,7 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
             View view = inflater.inflate(R.layout.fragment_item, container, false);
 
             // Set the adapter
-            mListView = (ListView) view.findViewById(android.R.id.list);
+            mListView = (ListView) view.findViewById(R.id.list);
             mListView.setAdapter(mAdapter);
 
             // Set OnItemClickListener so we can be notified on item clicks
@@ -177,7 +197,7 @@ public class SzckFragment extends Fragment implements AbsListView.OnItemClickLis
             if (null != mListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
-                mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+                mListener.onFragmentInteraction(listItems.get(position).toString());
             }
         }
 

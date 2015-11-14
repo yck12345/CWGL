@@ -42,7 +42,8 @@
                 android:layout_below="@id/image_szgl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/szgl"/>
+                android:text="@string/szgl"
+                android:textSize="20sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -62,7 +63,8 @@
                 android:layout_below="@id/image_szck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/szck"/>
+                android:text="@string/szck"
+                android:textSize="20sp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -82,7 +84,8 @@
                 android:layout_below="@id/image_htgl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/htgl"/>
+                android:text="@string/htgl"
+                android:textSize="20sp"/>
         </RelativeLayout>
 
 
